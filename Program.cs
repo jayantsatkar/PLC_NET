@@ -21,7 +21,7 @@ internal class Program
             var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
-            Logger.Info("Application Started");
+            Logger.Info("Application Started .NET 9");
             string FileOkSourcePath = config.GetSection("PLC")["FileOkSourcePath"];//  "10.168.158.230"; // PLC IP address
 
             if (System.IO.Directory.Exists(FileOkSourcePath))
