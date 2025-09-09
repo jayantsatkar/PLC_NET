@@ -25,14 +25,17 @@ namespace PLCConnection
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
 
-            string plcIp = config.GetSection("PLC")["IpAddress"];//  "10.168.158.230"; // PLC IP address
+            string plcIp = config.GetSection("PLC")["IpAddress"]!;//  "10.168.158.230"; // PLC IP address
             int port = Convert.ToInt16(config.GetSection("PLC")["Port"]);              // Modbus TCP port
             byte SlaveId = Convert.ToByte(config.GetSection("PLC")["SlaveId"]);
-            //  "SlaveId": 1,
+
+            ushort StartAddress = config.GetSection("PLC").GetValue<ushort>("StartAddress");
+            ushort RegisterCount = config.GetSection("PLC").GetValue<ushort>("RegisterCount");
             //ushort StartAddress = Convert.ushort(config.GetSection("PLC")["StartAddress"]);
             //"StartAddress": 510,
             // "RegisterCount": 5
-            
+
+
             string DMC = "";
 
             try
@@ -43,8 +46,8 @@ namespace PLCConnection
                     var modbusMaster = ModbusIpMaster.CreateIp(client);
 
                     byte slaveId = SlaveId;  // Unit ID (often 1)
-                    ushort startAddress = 510; // D510
-                    ushort numRegisters = 5;   // D510–D514
+                    ushort startAddress = StartAddress; // D510
+                    ushort numRegisters = RegisterCount;   // D510–D514
 
                     // Read holding registers
                     ushort[] registers = modbusMaster.ReadHoldingRegisters(slaveId, startAddress, numRegisters);

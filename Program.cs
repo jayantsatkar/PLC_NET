@@ -18,21 +18,22 @@ internal class Program
                     .Build();
 
             BasicConfigurator.Configure();
-            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            var logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly()!);
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
             Logger.Info("Application Started .NET 9");
-            string FileOkSourcePath = config.GetSection("PLC")["FileOkSourcePath"];//  "10.168.158.230"; // PLC IP address
-
+            string FileOkSourcePath = config.GetSection("PLC")["FileOkSourcePath"]!;//  "10.168.158.230"; // PLC IP address
+            Logger.Info("Path::"+ FileOkSourcePath);
             if (System.IO.Directory.Exists(FileOkSourcePath))
             {
+                Logger.Info("Event created");
                 FileSystemWatcher watcher = new FileSystemWatcher(FileOkSourcePath);
                 watcher.IncludeSubdirectories = true;
                 watcher.Created += FileSystemWatcher_Created_Ok;
                 watcher.EnableRaisingEvents = true;
             }
 
-            PLC.GetDMCNumber();
+           // PLC.GetDMCNumber();
 
             Console.WriteLine("Press ENTER to exit...");
             Console.ReadLine();
@@ -48,15 +49,15 @@ internal class Program
     {
         try
         {
+            Logger.Info("Event Called::"+ Path.GetFileName(e.FullPath));
             Thread.Sleep(2000);
             //PLC plc = new PLC();
             string DMC = PLC.GetDMCNumber();
-
+            Logger.Info("DMC::" + DMC);
             string folder = Path.GetDirectoryName(e.FullPath)!;
             string oldName = Path.GetFileName(e.FullPath);
             string newName = DMC + "_" + oldName;
             string newPath = Path.Combine(folder, newName);
-
             File.Move(e.FullPath, newPath);
         }
 
