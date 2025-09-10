@@ -70,6 +70,7 @@ namespace PLCConnection
             catch (Exception ex)
             {
                 Console.WriteLine("Error connecting to PLC: " + ex.Message);
+                Console.ForegroundColor = ConsoleColor.Red;
                 Logger.Error(ex);
             }
             return DMC;
