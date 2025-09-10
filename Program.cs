@@ -22,6 +22,9 @@ internal class Program
             XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
             Logger.Info("Application Started .NET 9");
+            Console.WriteLine("Borescope Service Started");
+            Console.ForegroundColor = ConsoleColor.Green;
+
             string FileOkSourcePath = config.GetSection("PLC")["FileOkSourcePath"]!;//  "10.168.158.230"; // PLC IP address
             Logger.Info("Path::"+ FileOkSourcePath);
             if (System.IO.Directory.Exists(FileOkSourcePath))
